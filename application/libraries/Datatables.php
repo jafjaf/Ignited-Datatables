@@ -488,7 +488,7 @@
 
 			$sWhere		= '';
 			$search		= $this->ci->input->post('search');
-			$sSearch	= $this->ci->db->escape_like_str(trim($search['value']));
+			$sSearch	= $this->ci->db->escape_like_str(trim($search['value'] ?? ''));
 
 			$columns	= array_values(array_diff($this->columns, $this->unset_columns));
 
@@ -684,14 +684,14 @@
 				$this->ci->db->or_like($val['field'], $val['match'], $val['side'], 'escape');
 			}
 
-			if (strlen($this->distinct) > 0) {
+			if (!is_null($this->distinct) && strlen($this->distinct) > 0) {
 
 				$this->ci->db->distinct($this->distinct);
 				$this->ci->db->select($this->oselect);
 
 			} else {
 				
-				if (strlen($this->count_column) > 0) {
+				if (!is_null($this->count_column) && strlen($this->count_column) > 0) {
 					
 					$this->ci->db->select('COUNT('.$this->count_column.') AS num_rows');
 					$query	= $this->ci->db->get(null, null, null, false);
@@ -793,7 +793,7 @@
 				$column	= $this->ci->input->post('columns');
 			}
 
-			if (is_numeric($column[0]['data'])) {
+			if (is_numeric($column[0]['data'] ?? '')) {
 
 				return false;
 
